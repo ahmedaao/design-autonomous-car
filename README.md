@@ -19,18 +19,29 @@ Complete the 'Image Segmentation' part of an embedded computer vision system for
 
 ---
 
-## Data Source
-
-Input Images (gtFine) are dowloaded here: [CITYSCAPES](https://www.cityscapes-dataset.com/dataset-overview/)
-
----
-
 ## Clone repository and install dependancies
 
+```
 git clone git@github.com:ahmedaao/design-autonomous-car.git
 cd design-autonomous-car
 pip install -r requirements.txt
-
+pip install . (or pip install --editable .) # Install modules from package src/
+```
 ---
 
-# TODO : Complete this README.md file 
+## Data Source
+
+Input Images and masks are dowloaded here: [CITYSCAPES](https://www.cityscapes-dataset.com/dataset-overview/)  
+You have to dowload 2 zip files:    
+1. P8_Cityscapes_leftImg8bit_trainvaltest.zip for original images
+2. P8_Cityscapes_gtFine_trainvaltest.zip for masks
+
+You have to manually unzip these 2 zip folders:
+
+```
+mkdir -p data/raw
+unzip P8_Cityscapes_leftImg8bit_trainvaltest.zip -d /path/to/data/raw
+unzip P8_Cityscapes_gtFine_trainvaltest.zip -d /path/to/data/raw
+```
+
+# TODO : Complete this README.md file
