@@ -1,7 +1,19 @@
+import os
 import numpy as np
 from tensorflow.keras.utils import Sequence
 from tensorflow.keras.preprocessing import image
 
+
+dataset_path = "/home/hao/repositories/design-autonomous-car/data/processed/dataset/"
+train_image = dataset_path + "train_images/"
+train_mask = dataset_path + "train_masks/"
+val_image = dataset_path + "val_images/"
+val_mask = dataset_path + "val_masks/"
+
+train_image_list = sorted(os.listdir(train_image))
+train_mask_list = sorted(os.listdir(train_mask))
+val_image_list = sorted(os.listdir(val_image))
+val_mask_list = sorted(os.listdir(val_mask))
 
 cats = {'void': [0, 1, 2, 3, 4, 5, 6],
         'flat': [7, 8, 9, 10],
