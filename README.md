@@ -31,12 +31,12 @@ pip install . (or pip install --editable .) # Install modules from package src/
 
 ## Data Source
 
-Input Images and masks are dowloaded here: [CITYSCAPES](https://www.cityscapes-dataset.com/dataset-overview/)  
+Input Images and output masks are dowloaded here: [CITYSCAPES](https://www.cityscapes-dataset.com/dataset-overview/)  
 You have to dowload 2 zip files:    
 1. P8_Cityscapes_leftImg8bit_trainvaltest.zip for original images
 2. P8_Cityscapes_gtFine_trainvaltest.zip for masks
 
-You have to manually unzip these 2 zip folders:
+You have to manually unzip these 2 zip files:
 
 ```
 mkdir -p data/raw

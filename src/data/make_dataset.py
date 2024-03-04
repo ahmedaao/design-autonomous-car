@@ -1,6 +1,7 @@
 import os
 import re
 import shutil
+import random
 
 
 def copy_images(source_folder, destination_folder):
@@ -33,12 +34,12 @@ def keep_only_masks(root_folder):
         root_folder (str): Folder where are stored sub folder
     """
     # Regular expression pattern to search for 'labelIds' in the file name
-    pattern = re.compile(r'labelIds')
+    pattern = re.compile(r"labelIds")
 
     # Traverse through the subfolders of the root folder
     for subdir, _, files in os.walk(root_folder):
         # Check if the folder contains 'masks' in its name
-        if 'masks' in subdir:
+        if "masks" in subdir:
             # Iterate over the files in the folder
             for file in files:
                 # Check if the file name contains 'labelIds'
@@ -60,7 +61,7 @@ def rename_files(root_folder):
         root_folder (stg): Dataset where are stored all sub folder train, test and val
     """
     # Regular expression pattern to extract the required parts of the file name
-    pattern = re.compile(r'(\w+)_(\d+)_(\d+)_\w+\.png')
+    pattern = re.compile(r"(\w+)_(\d+)_(\d+)_\w+\.png")
 
     # Traverse through the subfolders of the root folder
     for subdir, _, files in os.walk(root_folder):
@@ -81,3 +82,33 @@ def rename_files(root_folder):
                 # Rename the file
                 os.rename(old_path, new_path)
                 # print(f"Renamed {old_path} to {new_path}")
+
+
+def reduce_number_of_files(
+    files_directory_images, files_directory_masks, ratio_to_keep
+):
+    """Keep only x percent of images and masks to save resources
+
+    Args:
+        files_directory_images (str): Directory where are stored images
+        files_directory_masks (str): Directory where are stored masks
+        percentage_to_keep (float): Percentage of images and masks to keep
+    """
+    # Get the list of files in the directory
+    files = os.listdir(files_directory_images)
+
+    # Calculate the number of files to keep (20%)
+    num_files_to_keep = int(len(files) * ratio_to_keep)
+
+    # Randomly select the files to keep
+    files_to_keep = random.sample(files, num_files_to_keep)
+
+    # Remove the files not to be kept into files_directory_images
+    for file_name in files:
+        if file_name not in files_to_keep:
+            os.remove(os.path.join(files_directory_images, file_name))
+
+    # Remove the files not to be kept into files_directory_masks
+    for file_name in files:
+        if file_name not in files_to_keep:
+            os.remove(os.path.join(files_directory_masks, file_name))
