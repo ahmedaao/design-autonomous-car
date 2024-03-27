@@ -1,4 +1,7 @@
 import tensorflow as tf
+from keras.models import Model
+from tensorflow.keras.layers import Flatten, Dense, Dropout
+from keras.applications import VGG16
 
 
 def unet_mini(n_classes, input_height, input_width, channels):
@@ -75,4 +78,38 @@ def unet_mini(n_classes, input_height, input_width, channels):
 
     outputs = tf.keras.layers.Conv2D(n_classes, (1, 1), activation='sigmoid')(u9)
     model = tf.keras.Model(inputs=[inputs], outputs=[outputs])
+    return model
+
+
+def vgg16_and_classifier(n_classes, input_height, input_width, channels):
+    """Vgg16 + classifier with n_classes
+
+    Args:
+        n_classes (int): Original image segmented into n_classes
+        input_height (int): Number of y-axis pixels
+        input_width (int): Number of x-axis pixels
+        channels (int): RGB
+    """
+    conv_base = VGG16(weights='imagenet',
+                      include_top=False,  # Not including the by default 1000 classes classifier from Imagenet
+                      input_shape=(input_height, input_width, channels)
+                      )
+
+    conv_base.trainable = False  # Freeze convolutional layer to avoid their training
+
+    # Detail of the architecture of the VGG16 convolutional base
+    # conv_base.summary()
+
+    # Classifier
+    x = conv_base.output
+    x = Flatten()(x)
+    x = Dropout(0.5)(x)
+    x = Dense(128, activation='relu')(x)
+    x = Dense(128, activation='relu')(x)
+    x = Dropout(0.3)(x)
+
+    output_layer = Dense(n_classes, activation='Softmax')(x)
+
+    # Group the convolutional base and new fully-connected layers into a Model object.
+    model = Model(inputs=conv_base.input, outputs=output_layer)
     return model

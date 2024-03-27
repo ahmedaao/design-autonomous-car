@@ -63,17 +63,7 @@ def jaccard(y_true, y_pred):
     Returns:
         float: As the value tends towards 0, it is better
     """
-    intersection = tf.reduce_sum(
-        tf.cast(
-            tf.logical_and(tf.cast(y_true, tf.bool), tf.cast(y_pred, tf.bool)),
-            tf.float32,
-        )
-    )
-    union = tf.reduce_sum(
-        tf.cast(
-            tf.logical_or(tf.cast(y_true, tf.bool), tf.cast(y_pred, tf.bool)),
-            tf.float32,
-        )
-    )
-    iou = intersection / union
-    return iou
+    y_true_f = K.flatten(y_true)
+    y_pred_f = K.flatten(y_pred)
+    intersection = K.sum(y_true_f * y_pred_f)
+    return (intersection + 1.0) / (K.sum(y_true_f) + K.sum(y_pred_f) - intersection + 1.0)

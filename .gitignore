@@ -4,6 +4,7 @@ reports/
 .mypy_cache/
 build/
 design_autonomous_car.egg-info/
+models/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
