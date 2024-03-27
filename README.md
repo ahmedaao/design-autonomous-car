@@ -15,7 +15,13 @@ Complete the 'Image Segmentation' part of an embedded computer vision system for
 
 ## Deep Learning models 
 - Unet mini
-- VGG16 Unet
+- VGG16
+- VGG16 + Data augmentation
+
+## Metrics to evaluate the models
+- dice_coeff
+- jaccard
+- accuracy
 
 ---
 

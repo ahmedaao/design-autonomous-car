@@ -5,15 +5,15 @@ from tensorflow.keras.preprocessing import image
 
 
 dataset_path = "/home/hao/repositories/design-autonomous-car/data/processed/dataset/"
-train_image = dataset_path + "train_images/"
-train_mask = dataset_path + "train_masks/"
-val_image = dataset_path + "val_images/"
-val_mask = dataset_path + "val_masks/"
+train_images = dataset_path + "train_images/"
+train_masks = dataset_path + "train_masks/"
+val_images = dataset_path + "val_images/"
+val_masks = dataset_path + "val_masks/"
 
-train_image_list = sorted(os.listdir(train_image))
-train_mask_list = sorted(os.listdir(train_mask))
-val_image_list = sorted(os.listdir(val_image))
-val_mask_list = sorted(os.listdir(val_mask))
+train_image_list = sorted(os.listdir(train_images))
+train_mask_list = sorted(os.listdir(train_masks))
+val_image_list = sorted(os.listdir(val_images))
+val_mask_list = sorted(os.listdir(val_masks))
 
 cats = {'void': [0, 1, 2, 3, 4, 5, 6],
         'flat': [7, 8, 9, 10],
@@ -31,12 +31,12 @@ class DataGenerator(Sequence):
     Args:
         Sequence (class): Parent keras class to process by batch
     """
-    def __init__(self, x_set, y_set, resize_input_height,
-                 resize_input_width, batch_size):
+    def __init__(self, x_set, y_set, input_height,
+                 input_width, batch_size):
         self.x, self.y = x_set, y_set
         self.batch_size = batch_size
-        self.resize_input_height = resize_input_height
-        self.resize_input_width = resize_input_width
+        self.input_height = input_height
+        self.input_width = input_width
 
     def __len__(self):
         return int(np.ceil(len(self.x) / float(self.batch_size)))
@@ -46,8 +46,8 @@ class DataGenerator(Sequence):
         batch_x, batch_y = [], []
         drawn = 0
         for i in idx:
-            _image = image.img_to_array(image.load_img(f'{train_image}/{train_image_list[i]}', target_size=(self.resize_input_height, self.resize_input_width)))/255.
-            img = image.img_to_array(image.load_img(f'{train_mask}/{train_mask_list[i]}', grayscale=True, target_size=(self.resize_input_height, self.resize_input_width)))
+            _image = image.img_to_array(image.load_img(f'{train_images}/{train_image_list[i]}', target_size=(self.input_height, self.input_width)))/255.
+            img = image.img_to_array(image.load_img(f'{train_masks}/{train_mask_list[i]}', grayscale=True, target_size=(self.input_height, self.input_width)))
             labels = np.unique(img)
             if len(labels) < 3:
                 idx = np.random.randint(0, len(train_image_list),
