@@ -7,7 +7,7 @@ reports/
 .mypy_cache/
 build/
 design_autonomous_car.egg-info/
-models/
+models/unet_mini.keras
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
