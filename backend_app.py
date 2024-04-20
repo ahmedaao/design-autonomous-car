@@ -2,7 +2,6 @@ import io
 import base64
 import numpy as np
 from fastapi import FastAPI
-from fastapi.responses import JSONResponse
 from PIL import Image
 from src import metrics
 from src.config import color_map
