@@ -8,3 +8,4 @@ models/unet_mini.keras
 notebooks
 reports
 .venv
+README.md

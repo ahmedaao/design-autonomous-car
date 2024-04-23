@@ -20,13 +20,15 @@ cookiecutter==2.5.0
 cycler==0.12.1
 debugpy==1.8.1
 decorator==5.1.1
--e git+ssh://git@bitbucket.org/ahmedaao/design-autonomous-car.git@cd67844c2033e8ce4361be7745425bcfb2dd0e8b#egg=design_autonomous_car
+#-e git+ssh://git@bitbucket.org/ahmedaao/design-autonomous-car.git@cece49b01b4f4b1326c4789c1f8f140c6b4214cc#egg=design_autonomous_car
 dm-tree==0.1.8
 exceptiongroup==1.2.0
 executing==2.0.1
 fastapi==0.110.1
+filelock==3.13.4
 flatbuffers==23.5.26
 fonttools==4.48.1
+fsspec==2024.3.1
 gast==0.5.4
 gitdb==4.0.11
 GitPython==3.1.43
@@ -37,6 +39,7 @@ graphviz==0.20.1
 grpcio==1.62.0
 h11==0.14.0
 h5py==3.10.0
+huggingface-hub==0.22.2
 idna==3.6
 imageio==2.5.0
 imgaug==0.2.9
@@ -60,7 +63,7 @@ matplotlib==3.8.3
 matplotlib-inline==0.1.6
 mdurl==0.1.2
 ml-dtypes==0.2.0
-my-package==0.1
+#my-package==0.1
 namex==0.0.7
 nest-asyncio==1.6.0
 networkx==3.2.1
@@ -91,6 +94,7 @@ Pygments==2.17.2
 Pympler==1.0.1
 pyparsing==3.1.1
 python-dateutil==2.8.2
+python-dotenv==1.0.1
 python-multipart==0.0.9
 python-slugify==8.0.4
 pytz==2024.1

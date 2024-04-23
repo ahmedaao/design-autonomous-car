@@ -4,10 +4,10 @@ import base64
 import numpy as np
 from fastapi import FastAPI
 from PIL import Image
-from src import metrics
-from src.config import color_map
-from tensorflow.keras.models import load_model
 from dotenv import load_dotenv
+from tensorflow.keras.models import load_model
+from src.config import color_map
+from src import metrics
 
 # Load environment variables from .env file
 load_dotenv()
