@@ -1,5 +1,6 @@
 import os
 import numpy as np
+import albumentations as A
 from tensorflow.keras.utils import Sequence
 from tensorflow.keras.preprocessing import image
 
@@ -75,5 +76,77 @@ class DataGenerator(Sequence):
             #mask = np.resize(mask,(resize_input_height*resize_input_width, 8))
             batch_y.append(mask)
             batch_x.append(_image)
+            drawn += 1
+        return np.array(batch_x), np.array(batch_y)
+
+
+def augmentation(img, mask):
+    transform1 = A.Compose([
+        A.HorizontalFlip(p=0.5),
+        A.Rotate(15, p=0.5),
+        A.RandomBrightnessContrast(p=0.2),
+        A.Blur(p=0.01, blur_limit = 3),
+    ])
+    img_aug = transform1(image=img)
+    mask_aug = transform1(image=mask)
+
+    return [img_aug, mask_aug]
+
+
+class DataAugGenerator(Sequence):
+    """Processing using batch method
+
+    Args:
+        Sequence (class): Parent keras class to process by batch
+    """
+    def __init__(self, x_set, y_set, input_height,
+                 input_width, batch_size):
+        self.x, self.y = x_set, y_set
+        self.batch_size = batch_size
+        self.input_height = input_height
+        self.input_width = input_width
+
+    def __len__(self):
+        return int(np.ceil(len(self.x) / float(self.batch_size)))
+
+    def __getitem__(self, idx):
+        idx = np.random.randint(0, len(train_image_list), self.batch_size)
+        batch_x, batch_y = [], []
+        drawn = 0
+        for i in idx:
+            _image = image.img_to_array(image.load_img(f'{train_images}/{train_image_list[i]}', target_size=(self.input_height, self.input_width)))/255.
+            img = image.img_to_array(image.load_img(f'{train_masks}/{train_mask_list[i]}', grayscale=True, target_size=(self.input_height, self.input_width)))
+            labels = np.unique(img)
+            if len(labels) < 3:
+                idx = np.random.randint(0, len(train_image_list),
+                                        self.batch_size-drawn)
+                continue
+            img = np.squeeze(img)
+            mask = np.zeros((img.shape[0], img.shape[1], 8))
+            for i in range(-1, 34):
+                if i in cats['void']:
+                    mask[:, :, 0] = np.logical_or(mask[:, :, 0], (img == i))
+                elif i in cats['flat']:
+                    mask[:, :, 1] = np.logical_or(mask[:, :, 1], (img == i))
+                elif i in cats['construction']:
+                    mask[:, :, 2] = np.logical_or(mask[:, :, 2], (img == i))
+                elif i in cats['object']:
+                    mask[:, :, 3] = np.logical_or(mask[:, :, 3], (img == i))
+                elif i in cats['nature']:
+                    mask[:, :, 4] = np.logical_or(mask[:, :, 4], (img == i))
+                elif i in cats['sky']:
+                    mask[:, :, 5] = np.logical_or(mask[:, :, 5], (img == i))
+                elif i in cats['human']:
+                    mask[:, :, 6] = np.logical_or(mask[:, :, 6], (img == i))
+                elif i in cats['vehicle']:
+                    mask[:, :, 7] = np.logical_or(mask[:, :, 7], (img == i))
+            #mask = np.resize(mask,(resize_input_height*resize_input_width, 8))
+            mask = mask.astype(np.float32)
+            # Data augmentation
+            img_aug = augmentation(_image, mask)[0]['image']
+            mask_aug = augmentation(_image, mask)[1]['image']
+
+            batch_x.append(img_aug)
+            batch_y.append(mask_aug)
             drawn += 1
         return np.array(batch_x), np.array(batch_y)

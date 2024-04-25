@@ -5,7 +5,8 @@ import json
 import requests
 import streamlit as st
 from PIL import Image
-from src.config import color_map
+
+# from src.config import color_map
 
 
 def app():
@@ -21,8 +22,7 @@ def app():
 
     col1, col2 = st.columns(2)
     # Load the image using file_uploader
-    uploaded_file = st.sidebar.file_uploader("Upload an image",
-                                             type=["png", "jpg"])
+    uploaded_file = st.sidebar.file_uploader("Upload an image", type=["png", "jpg"])
 
     if uploaded_file is not None:
         original_image = Image.open(uploaded_file)
@@ -33,15 +33,23 @@ def app():
         col1.image(original_image)
 
         # Serialize original image to send it to FastAPI
-        buffered = io.BytesIO()  # Create a BytesIO object, which is an in-memory file-like object that can be used to store and manipulate binary data.
-        original_image.save(buffered, format="PNG")  # Save original image to the buffered BytesIO object in the PNG format
-        img_bytes = buffered.getvalue()  # Retrive the binary data stored in the buffered BytesIO object
-        img_base64 = base64.b64encode(img_bytes).decode('utf-8')  # Convert binary data to a string of printable ASCII characters
+        buffered = (
+            io.BytesIO()
+        )  # Create a BytesIO object, which is an in-memory file-like object that can be used to store and manipulate binary data.
+        original_image.save(
+            buffered, format="PNG"
+        )  # Save original image to the buffered BytesIO object in the PNG format
+        img_bytes = (
+            buffered.getvalue()
+        )  # Retrive the binary data stored in the buffered BytesIO object
+        img_base64 = base64.b64encode(img_bytes).decode(
+            "utf-8"
+        )  # Convert binary data to a string of printable ASCII characters
 
         # Send to the FastAPI
-        response = requests.post("http://localhost:8000/segment_image",
-                                 json={"image": img_base64},
-                                 timeout=120)
+        response = requests.post(
+            "http://backend:8000/segment_image", json={"image": img_base64}, timeout=120
+        )
 
         # Deserialize the image returned by FastAPI
         returned_image_base64 = response.json()["image"]

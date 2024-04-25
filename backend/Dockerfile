@@ -6,8 +6,8 @@ WORKDIR /app
 
 # Copy the necessary files into the container
 COPY backend/fastapi_app.py /app/
-COPY requirements.txt /app/
-COPY src/ /app/src
+COPY backend/requirements.txt /app/
+COPY src/ /app/src/
 COPY models/vgg16.keras /app/models/
 COPY setup.py /app/
 
@@ -21,4 +21,4 @@ ENV BASE_DIR=/app/
 EXPOSE 8000
 
 # Command to execute the FastAPI application
-CMD ["uvicorn", "fastapi_app:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "fastapi_app:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
