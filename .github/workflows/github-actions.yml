@@ -1,0 +1,38 @@
+name: Deploy to EC2 (AWS)
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install SSH key
+      uses: shimataro/ssh-key-action@v2
+      with:
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        known_hosts: 'just-a-placeholder-so-we-dont-get-errors'
+
+    - name: Adding Known Hosts
+      run: |
+        mkdir -p ~/.ssh
+        ssh-keyscan -H ${{ secrets.AWS_HOST }} >> ~/.ssh/known_hosts
+        # Set appropriate permissions
+        chmod 700 ~/.ssh
+        chmod 600 ~/.ssh/known_hosts
+
+    - name: Deploy with rsync
+      run: |
+        rsync -avz -e "ssh -o StrictHostKeyChecking=no" ./* ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }}:${{ secrets.AWS_ROOT_DIR_PATH }}
+
+    - name: Install Docker Compose
+      run: sudo apt-get update && sudo apt-get install -y docker-compose
+
+    - name: Run Docker Compose
+      run: sudo docker-compose up -d

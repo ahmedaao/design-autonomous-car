@@ -15,7 +15,7 @@ COPY setup.py /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Definition of the BASE_DIR environment variable
-ENV BASE_DIR=/app/
+ENV MODEL_DIR_PATH=/app/
 
 # Exposure of the port on which the application will listen
 EXPOSE 8000

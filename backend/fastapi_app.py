@@ -22,7 +22,7 @@ def read_root():
 
 # Load vgg16_model manually
 vgg16_model = load_model(
-    os.path.join(os.getenv("BASE_DIR"), "models/vgg16.keras"),
+    os.path.join(os.getenv("MODEL_DIR_PATH"), "models/vgg16.keras"),
     custom_objects={
         "dice_coeff": metrics.dice_coeff,
         "dice_loss": metrics.dice_loss,
